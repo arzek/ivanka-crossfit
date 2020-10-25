@@ -4,14 +4,14 @@ import * as Keyboard from 'telegraf-keyboard';
 import { AppService } from './app.service';
 
 enum MODE {
-  morning,
-  evening,
+  home,
+  street,
 }
 
 @Injectable()
 export class TelegramService {
-  morning = 'Програма на ранок';
-  evening = 'Програма для вечора';
+  morning = 'Програма для дому';
+  evening = 'Програма для вулиці';
 
   constructor(private readonly appService: AppService) {}
 
@@ -27,14 +27,14 @@ export class TelegramService {
     ctx.reply('Привіт!', keyboard.draw());
   }
 
-  @Hears('Програма на ранок')
-  async onMorning(ctx: Context) {
-    await this.main(MODE.morning, ctx);
+  @Hears('Програма для дому')
+  async onHome(ctx: Context) {
+    await this.main(MODE.home, ctx);
   }
 
-  @Hears('Програма для вечора')
-  async onEvening(ctx: Context) {
-    await this.main(MODE.evening, ctx);
+  @Hears('Програма для вулиці')
+  async onStreet(ctx: Context) {
+    await this.main(MODE.street, ctx);
   }
 
   private async main(mode: MODE, ctx: Context): Promise<void> {
@@ -43,12 +43,12 @@ export class TelegramService {
     let rounds = 0;
     let exercises = [];
 
-    if (mode === MODE.evening) {
-      const res = await this.appService.getEveningWorkoutProgram();
+    if (mode === MODE.home) {
+      const res = await this.appService.getHomeProgram();
       rounds = res.rounds;
       exercises = res.exercises;
-    } else if (mode === MODE.morning) {
-      const res = await this.appService.getMorningWorkoutProgram();
+    } else if (mode === MODE.street) {
+      const res = await this.appService.getStreetProgram();
       rounds = res.rounds;
       exercises = res.exercises;
     }

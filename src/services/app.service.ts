@@ -7,18 +7,18 @@ import { SpreadsheetsService } from './spreadsheets.service';
 
 @Injectable()
 export class AppService {
-  rounds = [2, 3, 4, 5];
+  rounds = [3, 4, 5, 6, 7];
   countExercises = [3, 4, 5, 6];
 
   constructor(private readonly spreadsheetsService: SpreadsheetsService) {}
 
-  async getMorningWorkoutProgram() {
-    const exercisesFromDb = await this.spreadsheetsService.getOnlyCardioExercises();
+  async getHomeProgram() {
+    const exercisesFromDb = await this.spreadsheetsService.getHomeExercises();
     return this.getWorkoutProgram(exercisesFromDb);
   }
 
-  async getEveningWorkoutProgram() {
-    const exercisesFromDb = await this.spreadsheetsService.getAllExercises();
+  async getStreetProgram() {
+    const exercisesFromDb = await this.spreadsheetsService.getStreetExercises();
     return this.getWorkoutProgram(exercisesFromDb);
   }
 

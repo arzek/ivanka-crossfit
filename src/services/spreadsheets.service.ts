@@ -12,37 +12,33 @@ export class SpreadsheetsService {
     this.doc.useApiKey(this.configService.get('API_KEY'));
   }
 
-  async getAllExercises(): Promise<string[]> {
-    const names = [];
+   async getHomeExercises(): Promise<string[]> {
+     const names = [];
 
-    await this.doc.loadInfo();
+     await this.doc.loadInfo();
 
-    const sheetIds = Object.keys(this.doc._rawSheets);
+     const sheet = this.doc.sheetsByIndex[0];
+     const rows = await sheet.getRows();
+     for (const row of rows) {
+       const name = row._rawData[0];
+       names.push(name);
+     }
 
-    for (const id of sheetIds) {
-      const sheet = this.doc.sheetsById[id];
-      const rows = await sheet.getRows();
-      for (const row of rows) {
-        const name = row._rawData[0];
-        names.push(name);
-      }
-    }
+     return names;
+   }
 
-    return names;
-  }
+   async getStreetExercises(): Promise<string[]> {
+     const names = [];
 
-  async getOnlyCardioExercises(): Promise<string[]> {
-    const names = [];
+     await this.doc.loadInfo();
 
-    await this.doc.loadInfo();
+     const sheet = this.doc.sheetsByIndex[1];
+     const rows = await sheet.getRows();
+     for (const row of rows) {
+       const name = row._rawData[0];
+       names.push(name);
+     }
 
-    const sheet = this.doc.sheetsByIndex[0];
-    const rows = await sheet.getRows();
-    for (const row of rows) {
-      const name = row._rawData[0];
-      names.push(name);
-    }
-
-    return names;
-  }
+     return names;
+   }
 }
